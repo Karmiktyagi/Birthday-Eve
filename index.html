@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Eve.</title>
+    <!-- Importing a clean, modern sans-serif font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #eaeaea;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        /* Cinematic / Editorial Typography */
+        h1 {
+            font-weight: 200;
+            font-size: clamp(2rem, 5vw, 4rem);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 3rem;
+        }
+
+        /* Countdown Grid */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .time-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+        }
+
+        .time-block span.digits {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-block span.label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+        }
+
+        /* High-Contrast Photo Frame */
+        .photo-frame {
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+            margin: 0 auto;
+            border: 1px solid #333;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            background: #111;
+            position: relative;
+            overflow: hidden;
+            /* Update background-image here when you have a photo */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Reveal Section (Hidden until midnight) */
+        #midnight-reveal {
+            display: none;
+            animation: fadeIn 2s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Utility for blurring out the countdown when midnight hits */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-content">
+        <h1 id="main-title">The Birthday Eve</h1>
+        <p class="subtitle" id="sub-title">Anticipation is part of the gift.</p>
+
+        <div class="countdown" id="countdown">
+            <div class="time-block">
+                <span class="digits" id="hours">00</span>
+                <span class="label">Hours</span>
+            </div>
+            <div class="time-block">
+                <span class="digits" id="minutes">00</span>
+                <span class="label">Minutes</span>
+            </div>
+            <div class="time-block">
+                <span class="digits" id="seconds">00</span>
+                <span class="label">Seconds</span>
+            </div>
+        </div>
+
+        <!-- Optional: Replace this div with an actual <img> or add a background-image via CSS -->
+        <div class="photo-frame" id="photo-frame">
+            [ Insert High-Contrast Portrait Here ]
+        </div>
+
+        <div id="midnight-reveal">
+            <h1>Happy Birthday.</h1>
+            <p class="subtitle">The wait is over.</p>
+        </div>
+    </div>
+
+    <script>
+        // Set the exact date and time of her birthday
+        // Format: 'YYYY-MM-DDTHH:MM:SS'
+        const birthdayDate = new Date('2026-06-20T00:00:00').getTime();
+
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
+
+            if (distance < 0) {
+                // Midnight has arrived
+                clearInterval(countdownInterval);
+                
+                // Hide the countdown and eve text
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('main-title').style.display = 'none';
+                document.getElementById('sub-title').style.display = 'none';
+                document.getElementById('photo-frame').style.display = 'none';
+                
+                // Show the birthday message
+                document.getElementById('midnight-reveal').style.display = 'block';
+                return;
+            }
+
+            // Time calculations for hours, minutes and seconds
+            // We ignore days to keep the focus strictly on the "eve" (hours/mins/secs)
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the result with padding (e.g., 09 instead of 9)
+            document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+            
+        }, 1000);
+    </script>
+</body>
+</html>
